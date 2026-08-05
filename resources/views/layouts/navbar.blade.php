@@ -14,12 +14,17 @@
         <li class="nav-item">
           <a class="nav-link fw-bold px-3 rounded-2 {{ Request::is('dashboard') ? 'active bg-secondary text-white' : 'text-secondary' }}" aria-current="page" href="{{ route('dashboard') }}">Dashboard</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link fw-bold px-3 rounded-2 {{ Request::is('admin/users') ? 'active bg-secondary text-white' : 'text-secondary' }}" href="{{ route('admin.users') }}">Users</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link fw-bold px-3 rounded-2 {{ Request::is('jenis*') ? 'active bg-secondary text-white' : 'text-secondary' }}" href="{{ route('jenis.index') }}">Jenis</a>
-        </li>
+
+        {{-- HANYA DITAMPILKAN JIKA BUKAN KASIR / ADMIN --}}
+        @if(auth()->user()->role && strtolower(auth()->user()->role->name) !== 'kasir')
+          <li class="nav-item">
+            <a class="nav-link fw-bold px-3 rounded-2 {{ Request::is('admin/users*') ? 'active bg-secondary text-white' : 'text-secondary' }}" href="{{ route('admin.users') }}">Users</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-bold px-3 rounded-2 {{ Request::is('jenis*') ? 'active bg-secondary text-white' : 'text-secondary' }}" href="{{ route('jenis.index') }}">Jenis</a>
+          </li>
+        @endif
+
         <li class="nav-item">
           <a class="nav-link fw-bold px-3 rounded-2 {{ Request::is('produk*') ? 'active bg-secondary text-white' : 'text-secondary' }}" href="{{ route('produk.index') }}">Produk</a>
         </li>

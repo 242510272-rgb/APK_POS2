@@ -7,9 +7,20 @@ use Illuminate\Http\Request;
 
 class JenisController extends Controller
 {
+    public function __construct()
+    {
+        // Proteksi agar Kasir tidak bisa akses URL /jenis
+        $this->middleware(function ($request, $next) {
+            if (auth()->check() && auth()->user()->role && strtolower(auth()->user()->role->name) === 'kasir') {
+                abort(403, 'Akses ditolak. Kasir tidak diizinkan mengelola jenis produk.');
+            }
+            return $next($request);
+        });
+    }
+
     public function index()
     {
-        $jenis = Jenis::all();
+        $jenis = Jenis::with('user')->get();
         return view('jenis.index', compact('jenis'));
     }
 
@@ -24,37 +35,32 @@ class JenisController extends Controller
             'nama_jenis' => 'required|string|max:255'
         ]);
 
-        Jenis::create($request->all());
+        Jenis::create([
+            'nama_jenis' => $request->nama_jenis,
+            'user_id'    => auth()->id(),
+        ]);
 
         return redirect()->route('jenis.index')->with('success', 'Jenis berhasil ditambahkan');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Jenis $jeni)
     {
-        // $jeni disesuaikan dengan parameter route laravel (jenis -> jeni)
         return view('jenis.edit', ['jenis' => $jeni]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Jenis $jeni)
     {
         $request->validate([
             'nama_jenis' => 'required|string|max:255'
         ]);
 
-        $jeni->update($request->all());
+        $jeni->update([
+            'nama_jenis' => $request->nama_jenis,
+        ]);
 
         return redirect()->route('jenis.index')->with('success', 'Jenis berhasil diperbarui');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Jenis $jeni)
     {
         $jeni->delete();

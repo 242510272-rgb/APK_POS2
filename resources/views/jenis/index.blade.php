@@ -19,25 +19,29 @@
         </a>
     </div>
 
-    <!-- CARD UTAMA -->
+    <!-- CARD TABEL -->
     <div class="card border border-2 border-secondary rounded-3 shadow-sm bg-white">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light text-uppercase small fw-bold text-secondary border-bottom border-2 border-secondary">
                         <tr>
-                            <th scope="col" class="ps-4" style="width: 10%;">#</th>
+                            <th scope="col" class="ps-4" style="width: 5%;">#</th>
                             <th scope="col">Nama Jenis</th>
-                            <th scope="col" class="text-end pe-4" style="width: 25%;">Aksi</th>
+                            <th scope="col">Ditambahkan Oleh</th>
+                            <th scope="col" class="text-end pe-4" style="width: 20%;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($jenis as $index => $item)
+                        @forelse($jenis as $item)
                             <tr>
-                                <td class="ps-4 text-secondary fw-semibold">
-                                    {{ isset($jenis) && method_exists($jenis, 'firstItem') ? $jenis->firstItem() + $index : $index + 1 }}
-                                </td>
+                                <td class="ps-4 text-secondary fw-semibold">{{ $loop->iteration }}</td>
                                 <td class="fw-bold text-dark">{{ $item->nama_jenis }}</td>
+                                <td>
+                                    <span class="badge bg-light text-dark border border-secondary px-2 py-1 fw-bold">
+                                        {{ $item->user->name ?? '-' }}
+                                    </span>
+                                </td>
                                 <td class="text-end pe-4">
                                     <div class="d-inline-flex gap-1">
                                         <a href="{{ route('jenis.edit', $item->id) }}" class="btn btn-sm btn-outline-dark fw-bold">
@@ -46,7 +50,7 @@
                                         <form action="{{ route('jenis.destroy', $item->id) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-dark fw-bold" onclick="return confirm('Yakin ingin menghapus jenis ini?')">
+                                            <button class="btn btn-sm btn-dark fw-bold" onclick="return confirm('Yakin hapus jenis ini?')">
                                                 Hapus
                                             </button>
                                         </form>
@@ -55,8 +59,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-muted text-center py-5 fst-italic">
-                                    Tidak ada data jenis produk.
+                                <td colspan="4" class="text-muted text-center py-5 fst-italic">
+                                    Data jenis produk belum ada.
                                 </td>
                             </tr>
                         @endforelse
@@ -64,13 +68,6 @@
                 </table>
             </div>
         </div>
-
-        <!-- PAGINASI (Jika menggunakan pagination dari controller) -->
-        @if (isset($jenis) && method_exists($jenis, 'hasPages') && $jenis->hasPages())
-            <div class="card-footer bg-white border-top border-2 border-secondary rounded-bottom-3 py-3 px-4">
-                {{ $jenis->links() }}
-            </div>
-        @endif
     </div>
 
 </div>
