@@ -19,15 +19,17 @@ class UserController extends Controller
     {
         $keyword = $request->input('search');
 
-        if($keyword) {
-            $users = User::whereRaw("MATCH(name, email) AGAINST(? IN BOOLEAN MODE)", [ '$keyword'])
+        $users = User::with('role')
+            ->when($keyword, function ($query, $keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('name', 'LIKE', "%{$keyword}%")
+                      ->orWhere('email', 'LIKE', "%{$keyword}%");
+                });
+            })
             ->paginate(10)
             ->withQueryString();
-} else {
-    $users = User::query()->paginate(10)->withQueryString();
-}
 
-return view('users.index', compact('users'));
+        return view('users.index', compact('users'));
     }
 
     /**
@@ -44,19 +46,18 @@ return view('users.index', compact('users'));
      * Store a newly created resource in storage.
      */
     public function store(StoreRequest $request)
-{
+    {
         $dataReq = $request->validated();
 
         $data['name'] = $dataReq['name'];
-        $data['email'] = $dataReq['email'];    // data dari input form pada create
-        $data['password'] = Hash::make($dataReq['password']);    // sesuai dengan name pada input
+        $data['email'] = $dataReq['email'];
+        $data['password'] = Hash::make($dataReq['password']);
         $data['role_id'] = $dataReq['role_id'];
 
-    User::create($data);
+        User::create($data);
 
-    // proses memasukan data ke tabel users
-    return redirect()->route('admin.users')->with('success', 'User berhasil dibuat');
-}
+        return redirect()->route('admin.users')->with('success', 'User berhasil dibuat');
+    }
 
     /**
      * Display the specified resource.
@@ -69,13 +70,12 @@ return view('users.index', compact('users'));
     /**
      * Show the form for editing the specified resource.
      */
-     public function edit(User $user) 
+    public function edit(User $user) 
     {
         $roles = Role::all();
 
         return view('users.edit', compact('user', 'roles'));
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -84,15 +84,13 @@ return view('users.index', compact('users'));
     {
         $dataReq = $request->validated();
 
-        $user->name         = $dataReq['name'];
-        $user->email        = $dataReq['email'];
-        $user->role_id      = $dataReq['role_id'];
+        $user->name    = $dataReq['name'];
+        $user->email   = $dataReq['email'];
+        $user->role_id = $dataReq['role_id'];
 
-
-        if ( !empty($dataReq['password']) ) {
+        if (!empty($dataReq['password'])) {
             $user->password = Hash::make($dataReq['password']);
         }
-
 
         $user->save();
 
