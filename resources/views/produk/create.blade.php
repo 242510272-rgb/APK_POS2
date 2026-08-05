@@ -3,11 +3,18 @@
 @section('title', 'Tambah Produk')
 
 @section('content')
-<h4>Tambah Produk</h4>
 
-<form action="{{ route('produk.store') }}"
-      method="POST"
-      enctype="multipart/form-data">
-    @include('Produk._form')
-</form>
+@include('layouts.navbar')
+
+<div class="container mt-4">
+    <h4>Tambah Produk</h4>
+
+    {{-- Tag <form> dan @csrf WAJIB ada di sini --}}
+    <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        
+        @include('produk._form')
+    </form>
+</div>
+
 @endsection

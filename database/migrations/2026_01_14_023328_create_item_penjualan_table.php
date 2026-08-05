@@ -6,34 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::table('item_penjualan', function (Blueprint $table) {
-            // Tambahkan kolom penjualan_id
-            $table->unsignedBigInteger('penjualan_id')->nullable()->after('id');
-            
-            // Tambahkan foreign key constraint
-            $table->foreign('penjualan_id')
-                  ->references('id')
-                  ->on('penjualan')
-                  ->onDelete('cascade');
+        Schema::create('item_penjualan', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('penjualan_id')
+                ->constrained('penjualan')
+                ->cascadeOnDelete();
+
+            $table->foreignId('produk_id')
+                ->constrained('produk')
+                ->cascadeOnDelete();
+
+            $table->integer('kuantitas');
+            $table->decimal('harga_satuan', 12, 2);
+            $table->decimal('subtotal', 12, 2);
+
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('item_penjualan', function (Blueprint $table) {
-            // Hapus foreign key dulu
-            $table->dropForeign(['penjualan_id']);
-            
-            // Hapus kolom
-            $table->dropColumn('penjualan_id');
-        });
+        Schema::dropIfExists('item_penjualan');
     }
 };

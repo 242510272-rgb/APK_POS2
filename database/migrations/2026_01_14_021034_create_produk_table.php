@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('produk', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id');
-            $table->string('foto');
+           $table->string('foto')->nullable(); // <-- Tambahkan ->nullable()
             $table->string('nama');
             $table->integer('harga_beli');
             $table->integer('harga_jual');

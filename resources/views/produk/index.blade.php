@@ -9,7 +9,7 @@
 <h1>Halaman Produk</h1>
 
 @can('create', App\Models\Produk::class)
-<a href="{{ route('produk.create') }}" method="GET" class="btn btn-primary mb-3">create</a>
+<a href="{{ route('produk.create') }}" class="btn btn-primary mb-3">create</a>
 @endcan
 
 <form action="{{ route('produk.index') }}" method="GET" class="mb-3">
@@ -31,9 +31,10 @@
 <thead>
     <tr>
         <th scope="col" width="5%">#</th>
-        <th scope="col" width="15%">User</th>
+        <th scope="col" width="10%">User</th>
         <th scope="col" width="10%">Foto</th>
-        <th scope="col" width="20%">Nama</th>
+        <th scope="col" width="15%">Nama</th>
+        <th scope="col" width="10%">Jenis</th> {{-- Header Kolom Jenis Baru --}}
         <th scope="col" width="10%">Harga Beli</th>
         <th scope="col" width="10%">Harga Jual</th>
         <th scope="col" width="10%">Stok</th>
@@ -46,16 +47,22 @@
         <td>{{ $products->firstItem() + $loop->index }}</td>
         <td>{{ $product->user->name }}</td>
         <td>
-         <img src="{{ asset('storage/'.$product->foto) }}"
-                    width="100"
-                    class="img-thumbnail">
+            <img src="{{ asset('storage/'.$product->foto) }}"
+                 width="100"
+                 class="img-thumbnail">
         </td>
         <td class="text-start">{{ $product->nama }}</td>
+        {{-- Menampilkan Nama Jenis / Kategori Produk --}}
+        <td>
+            <span class="badge bg-info text-dark">
+                {{ $product->jenis->nama_jenis ?? '-' }}
+            </span>
+        </td>
         <td>{{ number_format($product->harga_beli, 0, ',', '.') }}</td>
         <td>{{ number_format($product->harga_jual, 0, ',', '.') }}</td>
         <td class="align-middle">{{ $product->stok }}</td>
         <td class="d-flex gap-1 justify-content-center">
-            <!-- Tombol Detail (BARU) -->
+            <!-- Tombol Detail -->
             <a href="{{ route('produk.show', $product->id) }}" 
                class="btn btn-info btn-sm">
                <i class="fas fa-eye"></i> Detail
@@ -80,7 +87,7 @@
     </tr>
     @empty
     <tr>
-        <td colspan="8" class="text-center">Tidak ada data</td>
+        <td colspan="9" class="text-center">Tidak ada data</td> {{-- Diubah ke 9 karena tambah 1 kolom --}}
     </tr>
     @endforelse
 </tbody>

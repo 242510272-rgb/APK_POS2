@@ -1,18 +1,14 @@
-@csrf
-
-@csrf
-
 @if (!empty($produk->foto))
     <div class="mb-2">
-        <label>Foto Saat Ini</label><br>
+        <label class="form-label">Foto Saat Ini</label><br>
         <img src="{{ asset('storage/'. $produk->foto) }}" width="150" class="img-thumbnail">
     </div>
 @endif
 
-<div class="row">
+<div class="row mb-3">
     <div class="col">
         <div>
-            <label>Gambar</label>
+            <label class="form-label">Gambar</label>
             <input type="file" 
                    name="foto" 
                    onchange="previewImage(this)"
@@ -25,14 +21,31 @@
         </div>
     </div>
     <div class="mb-2">
-        <label></label><br>
         <img id="preview" class="img-thumbnail mt-2" style="display:none" width="150">
     </div>
 </div>
 
-<!-- untuk melihat foto yang lama -->
-<div>
-    <label>Nama Produk</label><br>
+<!-- Dropdown Jenis Produk -->
+<div class="mb-3">
+    <label class="form-label">Jenis Produk</label>
+    <select name="jenis_id" class="form-select @error('jenis_id') is-invalid @enderror">
+        <option value="">-- Pilih Jenis Produk --</option>
+        @foreach($jenis as $j)
+            <option value="{{ $j->id }}" {{ old('jenis_id', $produk->jenis_id ?? '') == $j->id ? 'selected' : '' }}>
+                {{ $j->nama_jenis }}
+            </option>
+        @endforeach
+    </select>
+    @error('jenis_id')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+</div>
+
+<!-- Nama Produk -->
+<div class="mb-3">
+    <label class="form-label">Nama Produk</label>
     <input type="text" name="name"
            class="form-control @error('name') is-invalid @enderror"
            value="{{ old('name', $produk->nama ?? '') }}">
@@ -43,9 +56,9 @@
     @enderror
 </div>
 
-<!-- Tambahkan field Harga Beli -->
-<div>
-    <label>Harga Beli</label><br>
+<!-- Harga Beli -->
+<div class="mb-3">
+    <label class="form-label">Harga Beli</label>
     <input type="number" name="purchase_price"
            class="form-control @error('purchase_price') is-invalid @enderror"
            value="{{ old('purchase_price', $produk->harga_beli ?? '') }}">
@@ -56,9 +69,9 @@
     @enderror
 </div>
 
-<!-- Tambahkan field Harga Jual -->
-<div>
-    <label>Harga Jual</label><br>
+<!-- Harga Jual -->
+<div class="mb-3">
+    <label class="form-label">Harga Jual</label>
     <input type="number" name="selling_price"
            class="form-control @error('selling_price') is-invalid @enderror"
            value="{{ old('selling_price', $produk->harga_jual ?? '') }}">
@@ -69,11 +82,12 @@
     @enderror
 </div>
 
-<div>
-    <label>Stok</label><br>
+<!-- Stok -->
+<div class="mb-3">
+    <label class="form-label">Stok</label>
     <input type="number" name="stock"
            class="form-control @error('stock') is-invalid @enderror"
-           value="{{ old('stock' ?? '') }}">
+           value="{{ old('stock', $produk->stok ?? '') }}">
     @error('stock')
         <div class="invalid-feedback">
             {{ $message }}
