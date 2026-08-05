@@ -1,44 +1,78 @@
 @extends('layouts.app')
 
+@section('title', 'Jenis Produk')
+
 @section('content')
 
 @include('layouts.navbar')
 
-<div class="container mt-4">
-    <h2>Halaman Jenis Produk</h2>
-    <a href="{{ route('jenis.create') }}" class="btn btn-primary mb-3">Tambah Jenis</a>
+<div class="container py-4" style="max-width: 1140px;">
 
-    <table class="table border text-center">
-        <thead>
-            <tr>
-                <th scope="col" width="10%">#</th>
-                <th scope="col" width="60%">Nama Jenis</th>
-                <th scope="col" width="30%">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($jenis as $index => $item)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $item->nama_jenis }}</td>
-                <td class="d-flex gap-1 justify-content-center">
-                    <a href="{{ route('jenis.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ route('jenis.destroy', $item->id) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus jenis ini?')">
-                            Hapus
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="3" class="text-center">Tidak ada data jenis produk</td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
+    <!-- HEADER UTAMA -->
+    <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom border-2 border-secondary">
+        <div>
+            <h1 class="h4 fw-bold text-dark mb-0">Jenis Produk</h1>
+            <small class="text-secondary fw-semibold">Kelola kategori atau kelompok jenis produk</small>
+        </div>
+        <a href="{{ route('jenis.create') }}" class="btn btn-secondary fw-bold px-3">
+            + Tambah Jenis
+        </a>
+    </div>
+
+    <!-- CARD UTAMA -->
+    <div class="card border border-2 border-secondary rounded-3 shadow-sm bg-white">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-uppercase small fw-bold text-secondary border-bottom border-2 border-secondary">
+                        <tr>
+                            <th scope="col" class="ps-4" style="width: 10%;">#</th>
+                            <th scope="col">Nama Jenis</th>
+                            <th scope="col" class="text-end pe-4" style="width: 25%;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($jenis as $index => $item)
+                            <tr>
+                                <td class="ps-4 text-secondary fw-semibold">
+                                    {{ isset($jenis) && method_exists($jenis, 'firstItem') ? $jenis->firstItem() + $index : $index + 1 }}
+                                </td>
+                                <td class="fw-bold text-dark">{{ $item->nama_jenis }}</td>
+                                <td class="text-end pe-4">
+                                    <div class="d-inline-flex gap-1">
+                                        <a href="{{ route('jenis.edit', $item->id) }}" class="btn btn-sm btn-outline-dark fw-bold">
+                                            Edit
+                                        </a>
+                                        <form action="{{ route('jenis.destroy', $item->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-dark fw-bold" onclick="return confirm('Yakin ingin menghapus jenis ini?')">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="text-muted text-center py-5 fst-italic">
+                                    Tidak ada data jenis produk.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PAGINASI (Jika menggunakan pagination dari controller) -->
+        @if (isset($jenis) && method_exists($jenis, 'hasPages') && $jenis->hasPages())
+            <div class="card-footer bg-white border-top border-2 border-secondary rounded-bottom-3 py-3 px-4">
+                {{ $jenis->links() }}
+            </div>
+        @endif
+    </div>
+
 </div>
 
 @endsection
