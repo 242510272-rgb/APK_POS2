@@ -58,7 +58,7 @@
                             <th scope="col">Total Pembayaran</th>
                             <th scope="col">Metode</th>
                             <th scope="col" class="text-center">Status</th>
-                            <th scope="col" class="text-end pe-4" style="width: 22%;">Aksi</th>
+                            <th scope="col" class="text-start ps-3" style="width: 22%;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,7 +82,7 @@
                                         {{ $sale->status }}
                                     </span>
                                 </td>
-                                <td class="text-end pe-4">
+                                <td class="text-start ps-3">
                                     <div class="d-inline-flex gap-1">
                                         <!-- Detail -->
                                         <a href="{{ route('penjualan.show', $sale) }}" class="btn btn-sm btn-outline-secondary fw-bold">
