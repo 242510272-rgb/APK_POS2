@@ -49,7 +49,7 @@
                         <tr>
                             <th scope="col" class="ps-4" style="width: 5%;">#</th>
                             <th scope="col" style="width: 8%;">Foto</th>
-                            <th scope="col"><Nama Produk/th>
+                            <th scope="col">Nama Produk</th>
                             <th scope="col">Jenis</th>
                             <th scope="col">Harga Beli</th>
                             <th scope="col">Harga Jual</th>
@@ -77,10 +77,10 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="fw-bold text-dark">{{ $product->nama }}</td>
+                                <td class="fw-bold text-dark">{{ $product->nama ?? $product->nama_produk }}</td>
                                 <td>
                                     <span class="badge bg-light text-dark border border-secondary px-2 py-1">
-                                        {{ $product->jenis->nama_jenis ?? '-' }}
+                                        {{ $product->jenis->nama_jenis ?? $product->jenis->nama ?? '-' }}
                                     </span>
                                 </td>
                                 <td class="text-secondary">Rp {{ number_format($product->harga_beli, 0, ',', '.') }}</td>
