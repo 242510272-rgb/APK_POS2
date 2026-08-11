@@ -2,24 +2,28 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <!-- Isi title yang kita kirimkan dari views lain -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Isi title yang dikirimkan dari views lain -->
     <title>@yield('title')</title>
-    <!-- memanggil link bootstraps -->
+    <!-- Memanggil Vite / Bootstrap -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
+<body class="bg-light min-vh-100">
 
-<div class="container">
+    <!-- Menggunakan container-fluid agar konten melebar penuh dari ujung kiri ke kanan -->
+    <div class="container-fluid px-4 py-3">
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    <!-- Isi konten yang kita kirimkan dari views lain -->
-    @yield('content')
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-</div>
+        <!-- Isi konten dari views lain -->
+        @yield('content')
+
+    </div>
 
 </body>
 </html>
