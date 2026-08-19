@@ -26,7 +26,7 @@
                         name="email" 
                         id="email"
                         class="form-control border border-secondary rounded-2 @error('email') is-invalid @enderror" 
-                        placeholder="nama@email.com"
+                        placeholder=""
                         value="{{ old('email') }}"
                         required
                     >
@@ -43,7 +43,7 @@
                         name="password" 
                         id="password"
                         class="form-control border border-secondary rounded-2 @error('password') is-invalid @enderror" 
-                        placeholder="••••••••"
+                        placeholder=""
                         required
                     >
                     @error('password')
