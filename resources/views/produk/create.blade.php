@@ -6,45 +6,28 @@
 
 @include('layouts.navbar')
 
-<!-- Menggunakan container-fluid agar mengikuti lebar layar penuh -->
-<div class="container-fluid px-4 py-4">
-
-    <!-- HEADER UTAMA -->
-    <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom border-2 border-secondary">
+<div class="container my-4">
+    <!-- Header Halaman -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h4 fw-bold text-dark mb-0">Tambah Produk Baru</h1>
-            <small class="text-secondary fw-semibold">Masukkan informasi produk dan stok barang ke sistem</small>
+            <h3 class="fw-bold mb-1">Tambah Produk</h3>
+            <p class="text-muted mb-0">Isi formulir di bawah untuk menambahkan item produk baru</p>
         </div>
-        <a href="{{ route('produk.index') }}" class="btn btn-outline-dark fw-bold px-3">
-            &larr; Kembali
+        <a href="{{ route('produk.index') }}" class="btn btn-secondary px-3">
+            Kembali
         </a>
     </div>
 
-    <!-- CARD FORM UTAMA -->
-    <div class="card border border-2 border-secondary rounded-3 shadow-sm bg-white">
-        <div class="card-header bg-light border-bottom border-2 border-secondary py-3 px-4">
-            <h2 class="h6 fw-bold text-dark mb-0">Formulir Data Produk</h2>
-        </div>
-
+    <!-- Form Container / Card -->
+    <div class="card border-secondary shadow-sm" style="border-radius: 8px;">
         <div class="card-body p-4">
-            {{-- Tag <form> dan @csrf WAJIB ada di sini --}}
             <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
+                
                 @include('produk._form')
-
-                <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top border-2 border-secondary">
-                    <a href="{{ route('produk.index') }}" class="btn btn-outline-secondary fw-bold px-4">
-                        Batal
-                    </a>
-                    <button type="submit" class="btn btn-secondary fw-bold px-4">
-                        Simpan Produk
-                    </button>
-                </div>
             </form>
         </div>
     </div>
-
 </div>
 
 @endsection
